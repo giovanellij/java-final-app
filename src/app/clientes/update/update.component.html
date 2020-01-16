@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h4 class="modal-title">Cliente: {{cliente.dni}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="this.editableClienteForm" (ngSubmit)="onSubmit()">
+        <input type="text" class="form-control" name="dni" placeholder="DNI" formControlName="dni">
+        <br/>
+        <input type="text" class="form-control" name="apellido" placeholder="Apellido" formControlName="apellido">
+        <br/>
+        <input type="text" class="form-control" name="nombre" placeholder="Nombre" formControlName="nombre">
+        <br/>
+        <input type="text" class="form-control" name="email" placeholder="Email" formControlName="email">
+        <br/>
+        <input type="text" class="form-control" name="telefono" placeholder="Teléfono" formControlName="telefono">
+        <br/>
+        <input type="text" class="form-control" name="direccion" placeholder="Dirección" formControlName="direccion">
+        <br/>
+        <button type="submit" class="btn btn-success btn-sm btn-block">
+            <i class="fas fa-save"></i>
+        </button>
+    </form>
+
+</div>

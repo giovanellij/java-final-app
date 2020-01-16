@@ -1,0 +1,86 @@
+<div class="row">
+    <div class="col">
+        <h3>Alquileres</h3>
+    </div>
+</div>
+<hr>
+<div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        <form class="card card-sm" [formGroup]="this.searchBox">
+            <div class="card-body row no-gutters align-items-center">
+                <div class="col-auto">
+                    <i class="fas fa-search h4 text-body"></i>
+                </div>
+                <!--end of col-->
+                <div class="col">
+                    <input (input)="onSearchChange($event.target.value)" class="form-control form-control-lg form-control-borderless" name="searchText" formControlName="searchText" type="search" placeholder="Buscar vechiculos">
+                </div>
+                <!--end of col-->
+                <!-- <div class="col-auto">
+                    <button class="btn btn-lg btn-success" type="submit">Buscar</button>
+                </div> -->
+                <!--end of col-->
+            </div>
+        </form>
+    </div>
+    <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" title="Ver más filtros">
+        <i class="fas fa-filter"></i>
+    </button>
+    <!--end of col-->
+</div>
+<br>
+
+<div id="collapseExample" [ngbCollapse]="isCollapsed">
+    <div class="card">
+        <div class="card-body">
+            <form class="form-inline" [formGroup]="this.filterForm">
+                <div class="form-group hidden">
+                    <div class="input-group">
+                        <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate">
+                        <ng-template #t let-date let-focused="focused">
+                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                        {{ date.day }}
+                      </span>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
+                                <i class="fas fa-calendar-week"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group ml-2">
+                    <div class="input-group">
+                        <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
+                                <i class="fas fa-calendar-week"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-check margin-left-cog">
+                    <input class="form-check-input" type="checkbox" id="gridCheck1" formControlName="alquileres">
+                    <label class="form-check-label" for="gridCheck1">
+                      Alquileres
+                    </label>
+                </div>
+                <div class="form-check margin-left-cog">
+                    <input class="form-check-input" type="checkbox" id="gridCheck2" formControlName="devoluciones">
+                    <label class="form-check-label" for="gridCheck2">
+                      Devoluciones
+                    </label>
+                </div>
+            </form>
+            <br>
+            <button type="button" class="btn btn-primary btn-sm btn-block" (click)="buscarPorFiltros()">Aplicar filtros</button>
+        </div>
+    </div>
+</div>
+
+<br>
