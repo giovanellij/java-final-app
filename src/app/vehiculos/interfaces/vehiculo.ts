@@ -1,5 +1,8 @@
+import { IServicio } from '../../servicios/interfaces/servicio';
 export interface IVehiculo {
+    id: number;
     patente: string;
     descripcion?: string;
-    disponible: boolean;
+    alquilado: boolean;
+    servicios: IServicio[];
 }

@@ -16,7 +16,6 @@ import { AlquilarComponent } from '../alquilar/alquilar.component';
 export class FeedComponent implements OnInit {
 
   public filterForm: FormGroup;
-  public searchBox: FormGroup;
   public fromDate: NgbDate;
   public hoveredDate: NgbDate;
   public isCollapsed = true;
@@ -33,12 +32,14 @@ export class FeedComponent implements OnInit {
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
-    this.searchBox = this.formBuilder.group({
-      searchText: [''],
-    });
     this.filterForm = this.formBuilder.group({
-      pendientesDevolucion: [false],
-      disponibles: [false]
+      searchTextForm: this.formBuilder.group({searchText: ['']}),
+      extendedFilterForm: this.formBuilder.group({
+        pendientesDevolucion: [true],
+        disponibles: [true],
+        from: [],
+        to: []
+      }),
     });
   }
 
@@ -49,7 +50,7 @@ export class FeedComponent implements OnInit {
   add() {
     const modalRef = this.modalService.open(CreateComponent);
     modalRef.result.then((data) => {
-      this.loadVehiculos();
+      this.loadVehiculos(null);
     }, (reason) => {
       console.log('NO OK');
     });
@@ -75,7 +76,7 @@ export class FeedComponent implements OnInit {
     const modalRef = this.modalService.open(UpdateComponent);
     modalRef.componentInstance.vehiculo = vehiculo;
     modalRef.result.then((data) => {
-      this.loadVehiculos();
+      this.loadVehiculos(null);
     }, (reason) => {
       console.log('NO OK');
     });
@@ -90,7 +91,12 @@ export class FeedComponent implements OnInit {
     return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
   }
   loadVehiculos(searchValue?: string) {
-    this.vehiculos = this.vehiculosService.GetByFilter(searchValue);
+    this.vehiculosService.GetByFilter(searchValue).subscribe(
+      (vehiculos: IVehiculo[]) => {
+        this.vehiculos = vehiculos;
+        console.log(this.vehiculos);
+      }
+    );
   }
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
@@ -101,9 +107,6 @@ export class FeedComponent implements OnInit {
       this.toDate = null;
       this.fromDate = date;
     }
-  }
-  onSearchChange(searchValue: string): void {
-    this.loadVehiculos(searchValue);
   }
   validateInput(currentValue: NgbDate, input: string): NgbDate {
     const parsed = this.formatter.parse(input);

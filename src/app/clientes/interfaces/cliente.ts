@@ -1,9 +1,13 @@
+import { IServicio } from '../../servicios/interfaces/servicio';
+
 export interface ICliente {
-    dni: string;
-    apellido: string;
-    nombre: string;
-    email: string;
-    telefono: string;
-    direccion: string;
-    activo: boolean;
+  id: string;
+  nroDocumento: string;
+  apellido: string;
+  nombre: string;
+  email: string;
+  telefono: string;
+  direccion: string;
+  activo: boolean;
+  servicios: IServicio[];
 }

@@ -12,9 +12,11 @@ export class AlquileresService {
       fechaHasta: new Date(2020, 2, 1),
       numeroReserva: 1,
       vehiculo: {
-        disponible: false,
+        id: 1,
+        alquilado: false,
         patente: 'ABC 123',
-        descripcion: 'AUDI A3'
+        descripcion: 'AUDI A3',
+        servicios: []
       }
     },
     {
@@ -22,9 +24,11 @@ export class AlquileresService {
       fechaHasta: new Date(2020, 1, 7),
       numeroReserva: 2,
       vehiculo: {
-        disponible: false,
+        id: 2,
+        alquilado: false,
         patente: 'ABC 123',
-        descripcion: 'AUDI A5'
+        descripcion: 'AUDI A5',
+        servicios: []
       }
     },
     {
@@ -32,9 +36,11 @@ export class AlquileresService {
       fechaHasta: new Date(2020, 2, 1),
       numeroReserva: 1,
       vehiculo: {
-        disponible: false,
+        id: 3,
+        alquilado: false,
         patente: 'ABC 123',
-        descripcion: 'AUDI A7'
+        descripcion: 'AUDI A7',
+        servicios: []
       }
     },
   ];

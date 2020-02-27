@@ -15,12 +15,12 @@ export class CreateComponent implements OnInit {
   constructor(
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,
-    private clienesService: ClientesService
+    private clientesService: ClientesService
     ) {}
 
   ngOnInit() {
     this.newClienteForm = this.formBuilder.group({
-      dni: ['', Validators.required],
+      nroDocumento: ['', Validators.required],
       apellido: ['', Validators.required],
       nombre: ['', Validators.required],
       email: ['', Validators.required],
@@ -32,8 +32,7 @@ export class CreateComponent implements OnInit {
 
   onSubmit() {
     if (this.newClienteForm.valid) {
-      this.clienesService.Save(this.newClienteForm.value);
-      this.activeModal.close();
+      this.clientesService.Save(this.newClienteForm.value).subscribe(response => {}, (error) => {}, () =>  this.activeModal.close());
     }
   }
 

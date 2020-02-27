@@ -21,15 +21,14 @@ export class CreateComponent implements OnInit {
   ngOnInit() {
     this.newVehiculoForm = this.formBuilder.group({
       patente: ['', Validators.required],
-      descripcion: [''],
-      disponible: [true]
+      descripcion: ['', Validators.required],
+      alquilado: [false]
     });
   }
 
   onSubmit() {
     if (this.newVehiculoForm.valid) {
-      this.vehiculosService.Save(this.newVehiculoForm.value);
-      this.activeModal.close();
+      this.vehiculosService.Save(this.newVehiculoForm.value).subscribe(response => {}, (error) => {}, () =>  this.activeModal.close());
     }
   }
 

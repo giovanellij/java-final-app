@@ -7,6 +7,7 @@ import { FeedComponent } from './feed/feed.component';
 import { UpdateComponent } from './update/update.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -14,6 +15,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [
     CommonModule,
     ClientesRoutingModule,
+    HttpClientModule,
     NgbModule,
     FormsModule,
     ReactiveFormsModule,

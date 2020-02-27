@@ -1,99 +1,124 @@
 import { Injectable } from '@angular/core';
 import { ICliente } from '../interfaces/cliente';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { map } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientesService {
 
-  clientes: ICliente[] = [
-    {
-      dni: '36444613',
-      apellido: 'Giovanelli',
-      nombre: 'Julian',
-      email: 'jgiovanelli@hotmail.com',
-      telefono: '3468417166',
-      direccion: 'San Lorenzo 1680',
-      activo: true
-    },
-    {
-      dni: '36444613',
-      apellido: 'Giovanelli',
-      nombre: 'Julian',
-      email: 'jgiovanelli@hotmail.com',
-      telefono: '3468417166',
-      direccion: 'San Lorenzo 1680',
-      activo: true
-    },
-    {
-      dni: '36444613',
-      apellido: 'Giovanelli',
-      nombre: 'Julian',
-      email: 'jgiovanelli@hotmail.com',
-      telefono: '3468417166',
-      direccion: 'San Lorenzo 1680',
-      activo: true
-    },
-    {
-      dni: '36444613',
-      apellido: 'Giovanelli',
-      nombre: 'Julian',
-      email: 'jgiovanelli@hotmail.com',
-      telefono: '3468417166',
-      direccion: 'San Lorenzo 1680',
-      activo: true
-    },
-    {
-      dni: '36444613',
-      apellido: 'Giovanelli',
-      nombre: 'Julian',
-      email: 'jgiovanelli@hotmail.com',
-      telefono: '3468417166',
-      direccion: 'San Lorenzo 1680',
-      activo: true
-    },
-    {
-      dni: '36444613',
-      apellido: 'Giovanelli',
-      nombre: 'Julian',
-      email: 'jgiovanelli@hotmail.com',
-      telefono: '3468417166',
-      direccion: 'San Lorenzo 1680',
-      activo: true
-    },
-  ];
+  private API: string = environment.api;
 
-  constructor() { }
+  private options = {
+    headers: new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Cache-Control': 'no-cache'
+    })
+  };
 
-  bloquear(cliente: ICliente) {
-    console.log(`Bloquear cliente: ${cliente.nombre}`);
+  // clientes: ICliente[] = [
+  //   {
+  //     dni: '36444613',
+  //     apellido: 'Giovanelli',
+  //     nombre: 'Julian',
+  //     email: 'jgiovanelli@hotmail.com',
+  //     telefono: '3468417166',
+  //     direccion: 'San Lorenzo 1680',
+  //     activo: true
+  //   },
+  //   {
+  //     dni: '36444613',
+  //     apellido: 'Giovanelli',
+  //     nombre: 'Julian',
+  //     email: 'jgiovanelli@hotmail.com',
+  //     telefono: '3468417166',
+  //     direccion: 'San Lorenzo 1680',
+  //     activo: true
+  //   },
+  //   {
+  //     dni: '36444613',
+  //     apellido: 'Giovanelli',
+  //     nombre: 'Julian',
+  //     email: 'jgiovanelli@hotmail.com',
+  //     telefono: '3468417166',
+  //     direccion: 'San Lorenzo 1680',
+  //     activo: true
+  //   },
+  //   {
+  //     dni: '36444613',
+  //     apellido: 'Giovanelli',
+  //     nombre: 'Julian',
+  //     email: 'jgiovanelli@hotmail.com',
+  //     telefono: '3468417166',
+  //     direccion: 'San Lorenzo 1680',
+  //     activo: true
+  //   },
+  //   {
+  //     dni: '36444613',
+  //     apellido: 'Giovanelli',
+  //     nombre: 'Julian',
+  //     email: 'jgiovanelli@hotmail.com',
+  //     telefono: '3468417166',
+  //     direccion: 'San Lorenzo 1680',
+  //     activo: true
+  //   },
+  //   {
+  //     dni: '36444613',
+  //     apellido: 'Giovanelli',
+  //     nombre: 'Julian',
+  //     email: 'jgiovanelli@hotmail.com',
+  //     telefono: '3468417166',
+  //     direccion: 'San Lorenzo 1680',
+  //     activo: true
+  //   },
+  // ];
+
+  constructor(
+    private http: HttpClient
+  ) { }
+
+  bloquear(clientes: ICliente) {
+    const url = `${this.API}/clientes/${clientes.id}`;
+    return this.http.delete<ICliente>(url);
   }
 
   desbloquear(cliente: ICliente) {
-    console.log(`Desloquear cliente: ${cliente.nombre}`);
+    const url = `${this.API}/clientes/${cliente.id}`;
+    return this.http.delete<ICliente>(url);
   }
 
-  GetByFilter(filter?: string) {
+  GetByFilter(filter?: any) {
     if (filter === null) {
-      return this.clientes;
+      return this.http.get(`${this.API}/clientes`).pipe(
+        map((clientes: ICliente[]) => {
+          return clientes;
+        })
+      );
     }
+
     const standardFilter = filter.toLowerCase();
-    return this.clientes.filter(
-      x => x.nombre.toLowerCase().includes(standardFilter)
-        || x.apellido.toLowerCase().includes(standardFilter)
-        || x.email.toLowerCase().includes(standardFilter)
-        || x.telefono.toLowerCase().includes(standardFilter));
+
+    return this.http.get(`${this.API}/clientes`).pipe(
+      map((clientes: ICliente[]) => {
+        return clientes.filter(
+          x => x.nombre.toLowerCase().includes(standardFilter)
+            || x.apellido.toLowerCase().includes(standardFilter)
+            || x.email.toLowerCase().includes(standardFilter)
+            || x.telefono.toLowerCase().includes(standardFilter));
+      })
+    );
   }
 
   Save(cliente: ICliente) {
-    this.clientes.push(cliente);
+    const url = `${this.API}/clientes`;
+    return this.http.post<ICliente>(url, cliente, this.options);
   }
 
   Update(cliente: ICliente) {
-    this.clientes.forEach(v => {
-      if (v.apellido === cliente.apellido) {
-        // v.descripcion = vehiculo.descripcion;
-      }
-    });
+    const url = `${this.API}/clientes/${cliente.id}`;
+    return this.http.put<ICliente>(url, cliente, this.options);
   }
 }

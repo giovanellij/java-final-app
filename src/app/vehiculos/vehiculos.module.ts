@@ -10,6 +10,7 @@ import { FeedComponent } from './feed/feed.component';
 import { CreateComponent } from './create/create.component';
 import { UpdateComponent } from './update/update.component';
 import { AlquilarComponent } from './alquilar/alquilar.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -19,7 +20,9 @@ import { AlquilarComponent } from './alquilar/alquilar.component';
     VehiculosRoutingModule,
     NgbModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
     AgGridModule.withComponents([]),
   ],
   entryComponents: [

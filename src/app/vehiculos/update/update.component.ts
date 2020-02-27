@@ -22,16 +22,16 @@ export class UpdateComponent implements OnInit {
 
   ngOnInit() {
     this.editableVehiculoForm = this.formBuilder.group({
-      patente: [{value: this.vehiculo.patente, disabled: true}, Validators.required],
-      descripcion: [this.vehiculo.descripcion],
-      disponible: [true]
+      id: [this.vehiculo.id],
+      patente: [this.vehiculo.patente, Validators.required],
+      descripcion: [this.vehiculo.descripcion, Validators.required],
+      alquilado: [this.vehiculo.alquilado]
     });
   }
 
   onSubmit() {
     if (this.editableVehiculoForm.valid) {
-      this.vehiculosService.Update(this.editableVehiculoForm.value);
-      this.activeModal.close();
+      this.vehiculosService.Update(this.editableVehiculoForm.value).subscribe(response => {}, (error) => {}, () =>  this.activeModal.close());
     }
   }
 

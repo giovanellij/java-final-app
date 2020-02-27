@@ -22,7 +22,8 @@ export class UpdateComponent implements OnInit {
 
   ngOnInit() {
     this.editableClienteForm = this.formBuilder.group({
-      dni: [this.cliente.dni, Validators.required],
+      id: [this.cliente.id, Validators.required],
+      nroDocumento: [this.cliente.nroDocumento, Validators.required],
       apellido: [this.cliente.apellido, Validators.required],
       nombre: [this.cliente.nombre, Validators.required],
       email: [this.cliente.email, Validators.required],
@@ -34,8 +35,7 @@ export class UpdateComponent implements OnInit {
 
   onSubmit() {
     if (this.editableClienteForm.valid) {
-      this.clientesService.Update(this.editableClienteForm.value);
-      this.activeModal.close();
+      this.clientesService.Update(this.editableClienteForm.value).subscribe(response => {}, (error) => {}, () =>  this.activeModal.close());
     }
   }
 
