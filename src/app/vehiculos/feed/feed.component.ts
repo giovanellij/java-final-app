@@ -5,8 +5,9 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbDate, NgbCalendar, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { CreateComponent } from '../create/create.component';
 import { UpdateComponent } from '../update/update.component';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AlquilarComponent } from '../alquilar/alquilar.component';
+import { ISearchVehiculoCriteria } from '../interfaces/criteria';
 
 @Component({
   selector: 'app-feed',
@@ -21,6 +22,7 @@ export class FeedComponent implements OnInit {
   public isCollapsed = true;
   public toDate: NgbDate;
   public vehiculos: IVehiculo[];
+  public criteria: ISearchVehiculoCriteria;
 
   constructor(
     private vehiculosService: VehiculosService,
@@ -37,8 +39,8 @@ export class FeedComponent implements OnInit {
       extendedFilterForm: this.formBuilder.group({
         pendientesDevolucion: [true],
         disponibles: [true],
-        from: [],
-        to: []
+        from: [this.fromDate, Validators.required],
+        to: [this.toDate, Validators.required]
       }),
     });
   }
@@ -56,18 +58,24 @@ export class FeedComponent implements OnInit {
     });
   }
   alquilarVehiculo(vehiculo: IVehiculo) {
-    const modalRef = this.modalService.open(AlquilarComponent, {size: 'lg'});
+    const modalRef = this.modalService.open(AlquilarComponent);
     modalRef.componentInstance.vehiculo = vehiculo;
     modalRef.result.then((data) => {
-      this.loadVehiculos();
+      this.loadVehiculos(null);
     }, (reason) => {
       console.log('NO OK');
     });
   }
   buscarPorFiltros() {
-    console.log(this.filterForm.value);
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    this.criteria = {
+      disponibles: this.filterForm.value.extendedFilterForm.disponibles,
+      from: `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,
+      pendientesDevolucion: this.filterForm.value.extendedFilterForm.pendientesDevolucion,
+      searchText: this.filterForm.value.searchTextForm.searchText,
+      to: `${this.toDate.year}-${this.toDate.month}-${this.toDate.day}`,
+    };
+
+    this.loadVehiculos(this.criteria);
   }
   devolverVehiculo(vehiculo: IVehiculo) {
     console.log(`Usted va a devolver ${vehiculo.descripcion}`);
@@ -90,7 +98,7 @@ export class FeedComponent implements OnInit {
   isRange(date: NgbDate) {
     return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
   }
-  loadVehiculos(searchValue?: string) {
+  loadVehiculos(searchValue?: ISearchVehiculoCriteria) {
     this.vehiculosService.GetByFilter(searchValue).subscribe(
       (vehiculos: IVehiculo[]) => {
         this.vehiculos = vehiculos;

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IVehiculo } from '../interfaces/vehiculo';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NgbDate, NgbActiveModal, NgbModal, NgbDateParserFormatter, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbActiveModal, NgbModal, NgbDateParserFormatter, NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { VehiculosService } from '../services/vehiculos.service';
+import { IServicio } from '../../servicios/interfaces/servicio';
 
 @Component({
   selector: 'app-alquilar',
@@ -13,65 +13,41 @@ export class AlquilarComponent implements OnInit {
 
   @Input() vehiculo: IVehiculo;
 
-  newAlquilerForm: FormGroup;
-
-  public fromDate: NgbDate;
+  public date: NgbDate;
   public hoveredDate: NgbDate;
   public isCollapsed = true;
-  public toDate: NgbDate;
+  public fecha: NgbDateStruct;
+
+  private servicio: IServicio;
+  private clienteId = 0;
+
 
   constructor(
     public activeModal: NgbActiveModal,
-    private formBuilder: FormBuilder,
     private vehiculosService: VehiculosService,
     private modalService: NgbModal,
     public calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter,
     ) {
-
-    this.fromDate = this.calendar.getToday();
-    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 10);
-
-    this.newAlquilerForm = this.formBuilder.group({
-      fechaDesde: ['', Validators.required],
-      fechaHasta: ['', Validators.required],
-      numeroReserva: [0, Validators.required],
-      vehiculo: [this.vehiculo, Validators.required],
-    });
-
     }
 
   ngOnInit() {
   }
 
-  onSubmit() {
-    if (this.newAlquilerForm.valid) {
-      this.vehiculosService.Alquilar(this.newAlquilerForm.value);
-      this.activeModal.close();
-    }
+  alquilarVehiculo() {
+
+    this.servicio = {
+      clienteId: +this.clienteId,
+      fecServicio: `${this.fecha.year}-${this.fecha.month}-${this.fecha.day}`,
+      fecCancelacion: null,
+      nroReserva: Math.floor(Math.random() * 100).toString(),
+      vehiculoId: this.vehiculo.id
+    };
+
+    this.vehiculosService.Alquilar(this.servicio).subscribe(response => {}, (error) => {}, () =>  this.activeModal.close());
   }
 
-  isHovered(date: NgbDate) {
-    return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);
-  }
-  isInside(date: NgbDate) {
-    return date.after(this.fromDate) && date.before(this.toDate);
-  }
-  isRange(date: NgbDate) {
-    return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
-  }
-  onDateSelection(date: NgbDate) {
-    if (!this.fromDate && !this.toDate) {
-      this.fromDate = date;
-    } else if (this.fromDate && !this.toDate && date.after(this.fromDate)) {
-      this.toDate = date;
-    } else {
-      this.toDate = null;
-      this.fromDate = date;
-    }
-  }
-  validateInput(currentValue: NgbDate, input: string): NgbDate {
-    const parsed = this.formatter.parse(input);
-    return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  receiveSelectedClienteEvent(id: number) {
+    this.clienteId = id;
   }
 }

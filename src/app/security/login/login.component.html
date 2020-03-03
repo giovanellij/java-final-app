@@ -1,0 +1,13 @@
+<div class="col-4">
+  <form [formGroup]="this.loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Usuario</label>
+      <input type="email" class="form-control" formControlName="userName" id="exampleInputEmail1" form aria-describedby="emailHelp">
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Contraseña</label>
+      <input type="password" formControlName="password" class="form-control" id="exampleInputPassword1">
+    </div>
+    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+  </form>
+</div>

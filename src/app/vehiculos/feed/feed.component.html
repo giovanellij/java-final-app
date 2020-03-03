@@ -87,7 +87,7 @@
 <br>
 
 <div class="card-columns">
-    <div class="card grow" [class.border-danger]="!vehiculo.disponible" *ngFor="let vehiculo of this.vehiculos">
+    <div class="card grow" [class.border-danger]="vehiculo.alquilado" *ngFor="let vehiculo of this.vehiculos">
         <div class="card-body text-center">
             <h5 class="card-title">{{vehiculo.patente}}</h5>
             <p class="card-text">{{vehiculo.descripcion}}</p>

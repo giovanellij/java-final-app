@@ -3,6 +3,7 @@ import { ICliente } from '../interfaces/cliente';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';
+import { LoginService } from '../../security/services/login.service';
 
 
 @Injectable({
@@ -19,65 +20,8 @@ export class ClientesService {
     })
   };
 
-  // clientes: ICliente[] = [
-  //   {
-  //     dni: '36444613',
-  //     apellido: 'Giovanelli',
-  //     nombre: 'Julian',
-  //     email: 'jgiovanelli@hotmail.com',
-  //     telefono: '3468417166',
-  //     direccion: 'San Lorenzo 1680',
-  //     activo: true
-  //   },
-  //   {
-  //     dni: '36444613',
-  //     apellido: 'Giovanelli',
-  //     nombre: 'Julian',
-  //     email: 'jgiovanelli@hotmail.com',
-  //     telefono: '3468417166',
-  //     direccion: 'San Lorenzo 1680',
-  //     activo: true
-  //   },
-  //   {
-  //     dni: '36444613',
-  //     apellido: 'Giovanelli',
-  //     nombre: 'Julian',
-  //     email: 'jgiovanelli@hotmail.com',
-  //     telefono: '3468417166',
-  //     direccion: 'San Lorenzo 1680',
-  //     activo: true
-  //   },
-  //   {
-  //     dni: '36444613',
-  //     apellido: 'Giovanelli',
-  //     nombre: 'Julian',
-  //     email: 'jgiovanelli@hotmail.com',
-  //     telefono: '3468417166',
-  //     direccion: 'San Lorenzo 1680',
-  //     activo: true
-  //   },
-  //   {
-  //     dni: '36444613',
-  //     apellido: 'Giovanelli',
-  //     nombre: 'Julian',
-  //     email: 'jgiovanelli@hotmail.com',
-  //     telefono: '3468417166',
-  //     direccion: 'San Lorenzo 1680',
-  //     activo: true
-  //   },
-  //   {
-  //     dni: '36444613',
-  //     apellido: 'Giovanelli',
-  //     nombre: 'Julian',
-  //     email: 'jgiovanelli@hotmail.com',
-  //     telefono: '3468417166',
-  //     direccion: 'San Lorenzo 1680',
-  //     activo: true
-  //   },
-  // ];
-
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
   ) { }
 
   bloquear(clientes: ICliente) {
@@ -88,6 +32,14 @@ export class ClientesService {
   desbloquear(cliente: ICliente) {
     const url = `${this.API}/clientes/${cliente.id}`;
     return this.http.delete<ICliente>(url);
+  }
+
+  GetAll() {
+    return this.http.get(`${this.API}/clientes`).pipe(
+      map((clientes: ICliente[]) => {
+        return clientes;
+      })
+    );
   }
 
   GetByFilter(filter?: any) {

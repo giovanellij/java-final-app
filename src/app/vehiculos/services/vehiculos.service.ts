@@ -4,6 +4,7 @@ import { IServicio } from '../../servicios/interfaces/servicio';
 import { environment } from '../../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { LoginService } from '../../security/services/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -53,19 +54,39 @@ export class VehiculosService {
   // ];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private loginService: LoginService
   ) { }
 
   Alquilar(servicio: IServicio) {
-    console.log(`Usted va a alquilar el vehiculo ${servicio.vehiculo.descripcion} el dia ${servicio.fechaDesde} hasta el dia ${servicio.fechaHasta}`);
+    console.log(servicio);
+    const url = `${this.API}/servicios`;
+    return this.http.post<IServicio>(url, servicio, this.options);
   }
 
   Devolver(servicio: IServicio) {
-    console.log(`Usted va a Devolver el vehiculo ${servicio.vehiculo.descripcion} el dia ${servicio.fechaDesde} hasta el dia ${servicio.fechaHasta}`);
+    console.log(`Usted va a Devolver el vehiculo ${servicio.vehiculoId} el dia ${servicio.fecServicio}`);
   }
 
   GetByFilter(filter?: any) {
-    return this.http.get(`${this.API}/vehiculos`).pipe(
+
+    let url = `${this.API}/vehiculos`;
+
+    if (!this.loginService.isAdmin()) {
+      url += 'Disponibles';
+    }
+
+    if (!filter) {
+      return this.http.get(url).pipe(
+        map((vehiculos: IVehiculo[]) => {
+          return vehiculos;
+        })
+      );
+    }
+
+    console.log(filter);
+
+    return this.http.post(`${this.API}/vehiculosFiltered`, filter, this.options).pipe(
       map((vehiculos: IVehiculo[]) => {
         return vehiculos;
       })
@@ -78,7 +99,6 @@ export class VehiculosService {
   }
 
   Update(vehiculo: IVehiculo) {
-    console.log(vehiculo);
     const url = `${this.API}/vehiculos/${vehiculo.id}`;
     return this.http.put<IVehiculo>(url, vehiculo, this.options);
   }
