@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'auth', loadChildren: () => SecurityModule },
   { path: 'vehiculos', loadChildren: () => VehiculosModule, canActivate: [AuthGuard]},
   { path: 'clientes', loadChildren: () => ClientesModule, canActivate: [AdminGuard]},
-  { path: 'servicios', loadChildren: () => ServiciosModule, canActivate: [AdminGuard]},
+  { path: 'servicios', loadChildren: () => ServiciosModule, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

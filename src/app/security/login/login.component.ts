@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from '../services/login.service';
 import { IUsuario } from '../interfaces/usuario';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       userName: ['', Validators.required],
@@ -35,6 +37,10 @@ export class LoginComponent implements OnInit {
       (response: any) => {
         localStorage.setItem('userName', response.userName);
         localStorage.setItem('isAdmin', response.administrador);
+        if (response.cliente !== null) {
+          localStorage.setItem('clienteId', response.cliente.id);
+        }
+        this.router.navigate(['']);
       },
       (error: any) => {
         console.log(error);

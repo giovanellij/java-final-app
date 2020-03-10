@@ -64,8 +64,9 @@ export class VehiculosService {
     return this.http.post<IServicio>(url, servicio, this.options);
   }
 
-  Devolver(servicio: IServicio) {
-    console.log(`Usted va a Devolver el vehiculo ${servicio.vehiculoId} el dia ${servicio.fecServicio}`);
+  Devolver(vehiculo: IVehiculo) {
+    const url = `${this.API}/serviciosDevolver`;
+    return this.http.post<IVehiculo>(url, vehiculo, this.options);
   }
 
   GetByFilter(filter?: any) {
@@ -83,8 +84,6 @@ export class VehiculosService {
         })
       );
     }
-
-    console.log(filter);
 
     return this.http.post(`${this.API}/vehiculosFiltered`, filter, this.options).pipe(
       map((vehiculos: IVehiculo[]) => {

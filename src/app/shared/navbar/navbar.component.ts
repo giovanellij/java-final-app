@@ -8,9 +8,13 @@ import { LoginService } from '../../security/services/login.service';
 })
 export class NavbarComponent implements OnInit {
 
+  userName: string;
+
   constructor(
     private loginService: LoginService
-  ) { }
+  ) {
+    this.userName = localStorage.getItem('userName');
+  }
 
   ngOnInit() {
   }
@@ -19,4 +23,12 @@ export class NavbarComponent implements OnInit {
     return this.loginService.isAdmin();
   }
 
+  isAuth() {
+    return this.loginService.isAuthenticated();
+  }
+
+  logOut() {
+    this.loginService.logOut();
+    window.location.reload();
+  }
 }

@@ -18,7 +18,7 @@ export class ClientesSelectComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.clientesService.GetAll().subscribe((clientes: ICliente[]) => this.clientes = clientes);
+    this.clientesService.GetAllActivos().subscribe((clientes: ICliente[]) => this.clientes = clientes);
   }
 
   sendSelectedOption(): void {

@@ -5,6 +5,8 @@ import { IServicio } from '../../interfaces/servicio';
 import { AlquileresService } from '../../services/alquileres.service';
 import { Router } from '@angular/router';
 import { CreateComponent } from '../create/create.component';
+import { LoginService } from '../../../security/services/login.service';
+import { ICriteriaServicio } from '../../interfaces/criteriaServicio';
 
 @Component({
   selector: 'app-feed',
@@ -19,11 +21,13 @@ export class FeedComponent implements OnInit {
   public hoveredDate: NgbDate;
   public isCollapsed = true;
   public toDate: NgbDate;
-  public servicios: IServicio[];
+  public servicios: IServicio[] = [];
+  public criteria: ICriteriaServicio;
 
   constructor(
     private alquileresService: AlquileresService,
     private router: Router,
+    private loginService: LoginService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     public calendar: NgbCalendar,
@@ -47,7 +51,7 @@ export class FeedComponent implements OnInit {
   add() {
     const modalRef = this.modalService.open(CreateComponent);
     modalRef.result.then((data) => {
-      this.loadServicios();
+      this.loadServicios(null);
     }, (reason) => {
       console.log('NO OK');
     });
@@ -56,9 +60,16 @@ export class FeedComponent implements OnInit {
     console.log(`Usted va a alquilar ${servicio}`);
   }
   buscarPorFiltros() {
-    console.log(this.filterForm.value);
-    console.log(this.fromDate);
-    console.log(this.toDate);
+    this.criteria = {
+      fromDate: `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,
+      toDate: `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,
+      alquileres: this.filterForm.value.alquileres,
+      devoluciones: this.filterForm.value.devoluciones
+    };
+
+    console.log(this.criteria);
+
+    this.loadServicios(this.criteria);
   }
   devolverVehiculo(servicio: IServicio) {
     console.log(`Usted va a devolver ${servicio}`);
@@ -72,8 +83,12 @@ export class FeedComponent implements OnInit {
   isRange(date: NgbDate) {
     return date.equals(this.fromDate) || date.equals(this.toDate) || this.isInside(date) || this.isHovered(date);
   }
-  loadServicios(searchValue?: string) {
-    this.servicios = this.alquileresService.GetByFilter(searchValue);
+  loadServicios(criteria?: ICriteriaServicio) {
+    this.alquileresService.GetByFilter(criteria).subscribe(
+      (servicios: IServicio[]) => { this.servicios = servicios; console.log(this.servicios); },
+      (error) => { console.log(error); },
+      () => {}
+    );
   }
   onDateSelection(date: NgbDate) {
     if (!this.fromDate && !this.toDate) {
@@ -85,12 +100,13 @@ export class FeedComponent implements OnInit {
       this.fromDate = date;
     }
   }
-  onSearchChange(searchValue: string): void {
-    this.loadServicios(searchValue);
-  }
   validateInput(currentValue: NgbDate, input: string): NgbDate {
     const parsed = this.formatter.parse(input);
     return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
+  }
+
+  isAdmin() {
+    return this.loginService.isAdmin();
   }
 
 }

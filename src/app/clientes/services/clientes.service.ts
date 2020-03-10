@@ -42,6 +42,14 @@ export class ClientesService {
     );
   }
 
+  GetAllActivos() {
+    return this.http.get(`${this.API}/clientesActivos`).pipe(
+      map((clientes: ICliente[]) => {
+        return clientes;
+      })
+    );
+  }
+
   GetByFilter(filter?: any) {
     if (filter === null) {
       return this.http.get(`${this.API}/clientes`).pipe(

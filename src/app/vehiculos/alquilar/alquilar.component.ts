@@ -3,6 +3,7 @@ import { IVehiculo } from '../interfaces/vehiculo';
 import { NgbDate, NgbActiveModal, NgbModal, NgbDateParserFormatter, NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { VehiculosService } from '../services/vehiculos.service';
 import { IServicio } from '../../servicios/interfaces/servicio';
+import { LoginService } from '../../security/services/login.service';
 
 @Component({
   selector: 'app-alquilar',
@@ -24,6 +25,7 @@ export class AlquilarComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
+    private loginService: LoginService,
     private vehiculosService: VehiculosService,
     private modalService: NgbModal,
     public calendar: NgbCalendar,
@@ -32,6 +34,9 @@ export class AlquilarComponent implements OnInit {
     }
 
   ngOnInit() {
+    if  (!this.loginService.isAdmin()) {
+      this.clienteId = +localStorage.getItem('clienteId');
+    }
   }
 
   alquilarVehiculo() {
@@ -44,10 +49,15 @@ export class AlquilarComponent implements OnInit {
       vehiculoId: this.vehiculo.id
     };
 
-    this.vehiculosService.Alquilar(this.servicio).subscribe(response => {}, (error) => {}, () =>  this.activeModal.close());
+    this.vehiculosService.Alquilar(this.servicio)
+      .subscribe(response => {}, (error) => { alert('La fecha seleccionada debe ser a partir de hoy'); }, () =>  this.activeModal.close());
   }
 
   receiveSelectedClienteEvent(id: number) {
     this.clienteId = id;
+  }
+
+  isAdmin() {
+    return this.loginService.isAdmin();
   }
 }

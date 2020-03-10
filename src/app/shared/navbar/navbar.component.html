@@ -11,15 +11,25 @@
             <li class="nav-item">
                 <a class="nav-link" href="#" [routerLink]="['']"><i class="fas fa-home"></i></a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#" [routerLink]="['clientes']" *ngIf="this.isAdmin()">Clientes</a>
+            <li class="nav-item" *ngIf="this.isAdmin()">
+                <a class="nav-link" href="#" [routerLink]="['clientes']">Clientes</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="this.isAdmin()">
                 <a class="nav-link" href="#" [routerLink]="['servicios']">Servicios</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" *ngIf="this.isAuth()">
                 <a class="nav-link" href="#" [routerLink]="['vehiculos']">Vehiculos</a>
+            </li>
+            <li class="nav-item" *ngIf="this.isAuth() && !this.isAdmin()">
+                <a class="nav-link" href="#" [routerLink]="['servicios/mis-alquileres']">Mis Alquileres</a>
             </li>
         </ul>
     </div>
+    <div class="form-inline my-2 my-lg-0" *ngIf="this.isAuth()">
+      <p>Bienvenido {{userName}}!</p>
+      <button class="btn btn-success btn-sm margin-left" (click)="logOut()">
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </div>
+
 </nav>

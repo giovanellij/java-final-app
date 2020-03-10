@@ -1,10 +1,23 @@
 import { Injectable } from '@angular/core';
 import { IServicio } from '../interfaces/servicio';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { ICriteriaServicio } from '../interfaces/criteriaServicio';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlquileresService {
+
+  private API: string = environment.api;
+
+  private options = {
+    headers: new HttpHeaders({
+      'Content-Type' : 'application/json',
+      'Cache-Control': 'no-cache'
+    })
+  };
 
  alquileres: IServicio[] = [
     // {
@@ -45,9 +58,45 @@ export class AlquileresService {
     // },
   ];
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
-  GetByFilter(filter?: string) {
-    return this.alquileres;
+  GetByCliente() {
+    const clienteId = localStorage.getItem('clienteId');
+
+    const url = `${this.API}/serviciosByCliente/${clienteId}`;
+
+    return this.http.get(url).pipe(
+      map((servicios: IServicio[]) => {
+        return servicios;
+      })
+    );
+  }
+
+  CancelarServicio(servicio: IServicio) {
+    const url = `${this.API}/serviciosDevolverByServicio`;
+    return this.http.post<IServicio>(url, servicio, this.options);
+  }
+
+  GetByFilter(filter?: ICriteriaServicio) {
+
+    let url = `${this.API}/servicios`;
+
+    if (filter === null) {
+      return this.http.get(url).pipe(
+        map((servicios: IServicio[]) => {
+          return servicios;
+        })
+      );
+    }
+
+    url += 'Filtered';
+
+    return this.http.post(url, filter, this.options).pipe(
+      map((servicios: IServicio[]) => {
+        return servicios;
+      })
+    );
   }
 }

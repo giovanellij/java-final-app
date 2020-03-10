@@ -8,7 +8,7 @@
     <div class="form-inline justify-content-center">
       <ngb-datepicker #dp [(ngModel)]="fecha" (navigate)="date = $event.next"></ngb-datepicker>
     </div>
-    <div class="form-inline justify-content-center">
+    <div class="form-inline justify-content-center" *ngIf="isAdmin();">
       <app-clientes-select (selectClienteEvent)="receiveSelectedClienteEvent($event)"></app-clientes-select>
     </div>
     <br>

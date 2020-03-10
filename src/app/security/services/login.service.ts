@@ -53,5 +53,6 @@ export class LoginService {
   logOut() {
     localStorage.removeItem('userName');
     localStorage.removeItem('password');
+    localStorage.removeItem('clienteId');
   }
 }

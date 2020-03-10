@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import * as AlquileresFeed from './alquileres/feed/feed.component';
+import { FeedComponent } from './alquileres/feed/feed.component';
+import { MisAlquileresComponent } from './alquileres/mis-alquileres/mis-alquileres.component';
+import { AdminGuard } from '../guards/admin.guard';
 
 
 const routes: Routes = [
-  { path: '', component: AlquileresFeed.FeedComponent },
+  { path: '', component: FeedComponent, canActivate: [AdminGuard]},
+  { path: 'mis-alquileres', component: MisAlquileresComponent },
 ];
 
 @NgModule({

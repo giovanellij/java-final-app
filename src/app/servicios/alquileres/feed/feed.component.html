@@ -4,83 +4,78 @@
     </div>
 </div>
 <hr>
-<div class="row justify-content-center">
-    <div class="col-12 col-md-10 col-lg-8">
-        <form class="card card-sm" [formGroup]="this.searchBox">
-            <div class="card-body row no-gutters align-items-center">
-                <div class="col-auto">
-                    <i class="fas fa-search h4 text-body"></i>
-                </div>
-                <!--end of col-->
-                <div class="col">
-                    <input (input)="onSearchChange($event.target.value)" class="form-control form-control-lg form-control-borderless" name="searchText" formControlName="searchText" type="search" placeholder="Buscar vechiculos">
-                </div>
-                <!--end of col-->
-                <!-- <div class="col-auto">
-                    <button class="btn btn-lg btn-success" type="submit">Buscar</button>
-                </div> -->
-                <!--end of col-->
-            </div>
-        </form>
-    </div>
-    <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" title="Ver más filtros">
-        <i class="fas fa-filter"></i>
-    </button>
-    <!--end of col-->
-</div>
-<br>
 
-<div id="collapseExample" [ngbCollapse]="isCollapsed">
-    <div class="card">
-        <div class="card-body">
-            <form class="form-inline" [formGroup]="this.filterForm">
-                <div class="form-group hidden">
-                    <div class="input-group">
-                        <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate">
-                        <ng-template #t let-date let-focused="focused">
-                            <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
-                        {{ date.day }}
-                      </span>
-                        </ng-template>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group">
-                        <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
-                                <i class="fas fa-calendar-week"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group ml-2">
-                    <div class="input-group">
-                        <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
-                                <i class="fas fa-calendar-week"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-check margin-left-cog">
-                    <input class="form-check-input" type="checkbox" id="gridCheck1" formControlName="alquileres">
-                    <label class="form-check-label" for="gridCheck1">
-                      Alquileres
-                    </label>
-                </div>
-                <div class="form-check margin-left-cog">
-                    <input class="form-check-input" type="checkbox" id="gridCheck2" formControlName="devoluciones">
-                    <label class="form-check-label" for="gridCheck2">
-                      Devoluciones
-                    </label>
-                </div>
-            </form>
-            <br>
-            <button type="button" class="btn btn-primary btn-sm btn-block" (click)="buscarPorFiltros()">Aplicar filtros</button>
-        </div>
-    </div>
+<div class="card">
+  <div class="card-body">
+      <form class="form-inline" [formGroup]="this.filterForm">
+          <div class="form-group hidden">
+              <div class="input-group">
+                  <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate">
+                  <ng-template #t let-date let-focused="focused">
+                      <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
+                  {{ date.day }}
+                </span>
+                  </ng-template>
+              </div>
+          </div>
+          <div class="form-group">
+              <div class="input-group">
+                  <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
+                          <i class="fas fa-calendar-week"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>
+          <div class="form-group ml-2">
+              <div class="input-group">
+                  <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
+                  <div class="input-group-append">
+                      <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
+                          <i class="fas fa-calendar-week"></i>
+                      </button>
+                  </div>
+              </div>
+          </div>
+          <div class="form-check margin-left-cog">
+              <input class="form-check-input" type="checkbox" id="gridCheck1" formControlName="alquileres">
+              <label class="form-check-label" for="gridCheck1">
+                Alquileres
+              </label>
+          </div>
+          <div class="form-check margin-left-cog">
+              <input class="form-check-input" type="checkbox" id="gridCheck2" formControlName="devoluciones">
+              <label class="form-check-label" for="gridCheck2">
+                Devoluciones
+              </label>
+          </div>
+      </form>
+      <br>
+      <button type="button" class="btn btn-primary btn-sm btn-block" (click)="buscarPorFiltros()">Buscar servicios</button>
+  </div>
 </div>
 
 <br>
+
+<div class="row">
+  <div class="col">
+      <h3>Mis alquileres</h3>
+  </div>
+</div>
+<hr>
+<div class="card-columns" *ngIf="this.servicios.length > 0">
+  <div class="card" [class.border-danger]="servicio.fecCancelacion !== null" [class.border-success]="servicio.fecCancelacion === null" *ngFor="let servicio of this.servicios">
+    <div class="card-body">
+      <h5 class="card-title">Servicio de alquiler Nº: {{ servicio.nroReserva }}</h5>
+      <p class="card-text">Fecha de contratación: {{ servicio.fecServicio | date: 'dd/MM/yyyy' }}</p>
+      <p class="card-text" *ngIf="servicio.fecCancelacion !== null">Fecha de cancelación: {{ servicio.fecCancelacion | date: 'dd/MM/yyyy' }}</p>
+      <button class="btn btn-danger" *ngIf='!servicio.fecCancelacion' (click)="this.cancelarServicio(servicio)">Cancelar servicio</button>
+    </div>
+  </div>
+</div>
+
+<p *ngIf="this.servicios.length === 0">No hay servicios disponibles para mostrar.</p>
+
+
+

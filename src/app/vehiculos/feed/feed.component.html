@@ -1,15 +1,18 @@
 <div class="row">
-    <div class="col">
+    <div class="col" *ngIf="this.isAdmin()">
         <h3>Vehículos</h3>
     </div>
-    <div class="col">
+    <div class="col" *ngIf="!this.isAdmin()">
+      <h3>Vehículos disponibles para alquilar</h3>
+    </div>
+    <div class="col" *ngIf="this.isAdmin()">
         <button class="btn btn-success" (click)="add()">
             <i class="fas fa-plus"></i>
         </button>
     </div>
 </div>
 <hr>
-<div class="row justify-content-center">
+<div class="row justify-content-center" *ngIf="this.isAdmin()">
     <div class="col-12 col-md-10 col-lg-8">
         <form class="card card-sm" [formGroup]="this.filterForm">
             <div class="card-body row no-gutters align-items-center" formGroupName="searchTextForm">
@@ -24,54 +27,24 @@
             </div>
         </form>
     </div>
-    <button type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" title="Ver más filtros">
+    <button  *ngIf="this.isAdmin()" type="button" class="btn btn-outline-primary" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample" title="Ver más filtros">
         <i class="fas fa-filter"></i>
     </button>
     <!--end of col-->
 </div>
 <br>
 
-<div id="collapseExample" [ngbCollapse]="isCollapsed">
+<div id="collapseExample" [ngbCollapse]="isCollapsed" *ngIf="this.isAdmin()">
     <div class="card">
         <div class="card-body" [formGroup]="this.filterForm">
             <form class="form-inline" formGroupName="extendedFilterForm">
-              <div class="form-group hidden">
-                  <div class="input-group">
-                      <input name="datepicker" class="form-control" ngbDatepicker #datepicker="ngbDatepicker" [autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="fromDate">
-                      <ng-template #t let-date let-focused="focused">
-                          <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)" [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date" (mouseleave)="hoveredDate = null">
-                      {{ date.day }}
-                    </span>
-                      </ng-template>
-                  </div>
-              </div>
-              <div class="form-group">
-                  <div class="input-group">
-                      <input #dpFromDate class="form-control" placeholder="yyyy-mm-dd" name="dpFromDate" [value]="formatter.format(fromDate)" (input)="fromDate = validateInput(fromDate, dpFromDate.value)">
-                      <div class="input-group-append">
-                          <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
-                              <i class="fas fa-calendar-week"></i>
-                          </button>
-                      </div>
-                  </div>
-              </div>
-              <div class="form-group ml-2">
-                  <div class="input-group">
-                      <input #dpToDate class="form-control" placeholder="yyyy-mm-dd" name="dpToDate" [value]="formatter.format(toDate)" (input)="toDate = validateInput(toDate, dpToDate.value)">
-                      <div class="input-group-append">
-                          <button class="btn btn-outline-secondary calendar" (click)="datepicker.toggle()" type="button">
-                              <i class="fas fa-calendar-week"></i>
-                          </button>
-                      </div>
-                  </div>
-              </div>
-              <div class="form-check margin-left-cog">
+              <div class="form-check margin-left-cog" *ngIf="isAdmin();">
                   <input class="form-check-input" type="checkbox" id="gridCheck1" formControlName="pendientesDevolucion">
                   <label class="form-check-label" for="gridCheck1">
                     Pendientes devolución
                   </label>
               </div>
-              <div class="form-check margin-left-cog">
+              <div class="form-check margin-left-cog" *ngIf="isAdmin();">
                   <input class="form-check-input" type="checkbox" id="gridCheck2" formControlName="disponibles">
                   <label class="form-check-label" for="gridCheck2">
                     Disponibles
@@ -86,7 +59,7 @@
 
 <br>
 
-<div class="card-columns">
+<div class="card-columns" *ngIf="this.vehiculos.length > 0">
     <div class="card grow" [class.border-danger]="vehiculo.alquilado" *ngFor="let vehiculo of this.vehiculos">
         <div class="card-body text-center">
             <h5 class="card-title">{{vehiculo.patente}}</h5>
@@ -96,7 +69,7 @@
             <div class="row justify-content-center">
                 <button class="btn btn-success" *ngIf='!vehiculo.alquilado' (click)="this.alquilarVehiculo(vehiculo)">Alquilar</button>
                 <button class="btn btn-danger" *ngIf='vehiculo.alquilado' (click)="this.devolverVehiculo(vehiculo)">Devolver</button>
-                <div class="dropdown margin-left-cog">
+                <div class="dropdown margin-left-cog" *ngIf="!vehiculo.alquilado && this.isAdmin()">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-cog"></i>
                     </button>
@@ -109,3 +82,7 @@
         </div>
     </div>
 </div>
+
+
+
+<p *ngIf="this.vehiculos.length === 0">No hay vehiculos disponibles para mostrar.</p>

@@ -18,7 +18,7 @@
                 </div>
                 <!--end of col-->
                 <div class="col">
-                    <input (input)="onSearchChange($event.target.value)" class="form-control form-control-lg form-control-borderless" name="searchText" formControlName="searchText" type="search" placeholder="Buscar vechiculos">
+                    <input (input)="onSearchChange($event.target.value)" class="form-control form-control-lg form-control-borderless" name="searchText" formControlName="searchText" type="search" placeholder="Buscar clientes">
                 </div>
                 <!--end of col-->
                 <!-- <div class="col-auto">
@@ -31,7 +31,7 @@
     <!--end of col-->
 </div>
 <br>
-<div class="card-columns">
+<div class="card-columns" *ngIf="this.clientes.length > 0">
     <div class="card grow" [class.border-danger]="!cliente.activo" *ngFor="let cliente of this.clientes">
         <div class="card-body text-center">
             <h5 class="card-title">{{cliente.apellido}}, {{cliente.nombre}}</h5>
@@ -54,3 +54,6 @@
         </div>
     </div>
 </div>
+
+<p *ngIf="this.clientes.length === 0">No hay clientes disponibles para mostrar.</p>
+
