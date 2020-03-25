@@ -4,5 +4,16 @@ export interface IVehiculo {
     patente: string;
     descripcion?: string;
     alquilado: boolean;
+    categoriaId: number;
     servicios: IServicio[];
+}
+
+export interface ICreateVehiculo {
+  id: number;
+  patente: string;
+  descripcion?: string;
+  alquilado: boolean;
+  categoriaId: number;
+  servicios: IServicio[];
+  createdBy: string;
 }

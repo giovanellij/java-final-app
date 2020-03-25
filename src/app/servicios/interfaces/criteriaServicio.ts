@@ -3,4 +3,5 @@ export interface ICriteriaServicio {
   devoluciones: boolean;
   fromDate: string;
   toDate: string;
+  searchBy: string;
 }

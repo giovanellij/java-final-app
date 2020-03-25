@@ -15,7 +15,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class FeedComponent implements OnInit {
 
   filterForm: FormGroup;
-  clientes: ICliente[];
+  clientes: ICliente[] = [];
 
   constructor(
     private clientesService: ClientesService,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IVehiculo } from '../interfaces/vehiculo';
+import { IVehiculo, ICreateVehiculo } from '../interfaces/vehiculo';
 import { IServicio } from '../../servicios/interfaces/servicio';
 import { environment } from '../../../environments/environment';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
@@ -20,43 +20,14 @@ export class VehiculosService {
     })
   };
 
-  // vehiculos: IVehiculo[] = [
-  //   {
-  //     patente: 'ABC 123',
-  //     descripcion: 'BMW M3',
-  //     disponible: true
-  //   },
-  //   {
-  //     patente: 'ABC 234',
-  //     descripcion: 'BMW M3',
-  //     disponible: false
-  //   },
-  //   {
-  //     patente: 'ABC 345',
-  //     descripcion: 'BMW M3',
-  //     disponible: true
-  //   },
-  //   {
-  //     patente: 'ABC 456',
-  //     descripcion: 'BMW M3',
-  //     disponible: false
-  //   },
-  //   {
-  //     patente: 'ABC 567',
-  //     descripcion: 'BMW M3',
-  //     disponible: false
-  //   },
-  //   {
-  //     patente: 'ABC 678',
-  //     descripcion: 'BMW M3',
-  //     disponible: true
-  //   },
-  // ];
+  private username: string;
 
   constructor(
     private http: HttpClient,
     private loginService: LoginService
-  ) { }
+  ) {
+    this.username = localStorage.getItem('userName');
+  }
 
   Alquilar(servicio: IServicio) {
     console.log(servicio);
@@ -78,27 +49,27 @@ export class VehiculosService {
     }
 
     if (!filter) {
-      return this.http.get(url).pipe(
+      return this.http.get(`${url}`).pipe(
         map((vehiculos: IVehiculo[]) => {
           return vehiculos;
         })
       );
     }
 
-    return this.http.post(`${this.API}/vehiculosFiltered`, filter, this.options).pipe(
+    return this.http.post(`${this.API}/vehiculosFiltered/${this.username}`, filter, this.options).pipe(
       map((vehiculos: IVehiculo[]) => {
         return vehiculos;
       })
     );
   }
 
-  Save(vehiculo: IVehiculo) {
+  Save(vehiculo: ICreateVehiculo) {
     const url = `${this.API}/vehiculos`;
-    return this.http.post<IVehiculo>(url, vehiculo, this.options);
+    return this.http.post<ICreateVehiculo>(url, vehiculo, this.options);
   }
 
-  Update(vehiculo: IVehiculo) {
+  Update(vehiculo: ICreateVehiculo) {
     const url = `${this.API}/vehiculos/${vehiculo.id}`;
-    return this.http.put<IVehiculo>(url, vehiculo, this.options);
+    return this.http.put<ICreateVehiculo>(url, vehiculo, this.options);
   }
 }

@@ -10,6 +10,10 @@
         <br/>
 
         <input type="text" class="form-control" name="descripcion" placeholder="Descripción" formControlName="descripcion">
+        <br>
+        <div>
+          <app-categorias-select (selectCategoriaEvent)="receiveSelectedCategoriaEvent($event)"></app-categorias-select>
+        </div>
 
         <br/>
         <button type="submit" class="btn btn-success btn-sm btn-block">

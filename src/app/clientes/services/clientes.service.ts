@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ICliente } from '../interfaces/cliente';
+import { ICliente, ICreateCliente } from '../interfaces/cliente';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';
-import { LoginService } from '../../security/services/login.service';
 
 
 @Injectable({
@@ -12,6 +11,8 @@ import { LoginService } from '../../security/services/login.service';
 export class ClientesService {
 
   private API: string = environment.api;
+
+  private username: string;
 
   private options = {
     headers: new HttpHeaders({
@@ -22,20 +23,22 @@ export class ClientesService {
 
   constructor(
     private http: HttpClient,
-  ) { }
+  ) {
+    this.username = localStorage.getItem('userName');
+   }
 
   bloquear(clientes: ICliente) {
-    const url = `${this.API}/clientes/${clientes.id}`;
+    const url = `${this.API}/clientes/${clientes.id}/${this.username}`;
     return this.http.delete<ICliente>(url);
   }
 
   desbloquear(cliente: ICliente) {
-    const url = `${this.API}/clientes/${cliente.id}`;
+    const url = `${this.API}/clientes/${cliente.id}/${this.username}`;
     return this.http.delete<ICliente>(url);
   }
 
   GetAll() {
-    return this.http.get(`${this.API}/clientes`).pipe(
+    return this.http.get(`${this.API}/clientes/${this.username}`).pipe(
       map((clientes: ICliente[]) => {
         return clientes;
       })
@@ -43,7 +46,7 @@ export class ClientesService {
   }
 
   GetAllActivos() {
-    return this.http.get(`${this.API}/clientesActivos`).pipe(
+    return this.http.get(`${this.API}/clientesActivos/${this.username}`).pipe(
       map((clientes: ICliente[]) => {
         return clientes;
       })
@@ -52,7 +55,7 @@ export class ClientesService {
 
   GetByFilter(filter?: any) {
     if (filter === null) {
-      return this.http.get(`${this.API}/clientes`).pipe(
+      return this.http.get(`${this.API}/clientes/${this.username}`).pipe(
         map((clientes: ICliente[]) => {
           return clientes;
         })
@@ -61,7 +64,7 @@ export class ClientesService {
 
     const standardFilter = filter.toLowerCase();
 
-    return this.http.get(`${this.API}/clientes`).pipe(
+    return this.http.get(`${this.API}/clientes/${this.username}`).pipe(
       map((clientes: ICliente[]) => {
         return clientes.filter(
           x => x.nombre.toLowerCase().includes(standardFilter)
@@ -72,13 +75,13 @@ export class ClientesService {
     );
   }
 
-  Save(cliente: ICliente) {
+  Save(cliente: ICreateCliente) {
     const url = `${this.API}/clientes`;
-    return this.http.post<ICliente>(url, cliente, this.options);
+    return this.http.post<ICreateCliente>(url, cliente, this.options);
   }
 
-  Update(cliente: ICliente) {
+  Update(cliente: ICreateCliente) {
     const url = `${this.API}/clientes/${cliente.id}`;
-    return this.http.put<ICliente>(url, cliente, this.options);
+    return this.http.put<ICreateCliente>(url, cliente, this.options);
   }
 }

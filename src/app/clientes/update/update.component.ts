@@ -3,6 +3,7 @@ import { ICliente } from '../interfaces/cliente';
 import { ClientesService } from '../services/clientes.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-update',
@@ -29,14 +30,25 @@ export class UpdateComponent implements OnInit {
       email: [this.cliente.email, Validators.required],
       telefono: [this.cliente.telefono, Validators.required],
       direccion: [this.cliente.direccion, Validators.required],
-      activo: [this.cliente.activo]
+      createdBy: [localStorage.getItem('userName'), Validators.required],
+      activo: [this.cliente.activo, Validators.required]
     });
   }
 
   onSubmit() {
     if (this.editableClienteForm.valid) {
-      this.clientesService.Update(this.editableClienteForm.value).subscribe(response => {}, (error) => {}, () =>  this.activeModal.close());
+      this.clientesService.Update(this.editableClienteForm.value).subscribe(
+        response => {
+          alert('El cliente ha sido editado satisfactoriamente.');
+        },
+        (error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            alert('Usted no tiene permiso para realizar esta acción');
+          } else {
+            alert('Ups XD');
+          }
+        },
+        () =>  this.activeModal.close());
     }
   }
-
 }

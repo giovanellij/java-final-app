@@ -56,23 +56,22 @@ export class FeedComponent implements OnInit {
       console.log('NO OK');
     });
   }
-  alquilarVehiculo(servicio: IServicio) {
-    console.log(`Usted va a alquilar ${servicio}`);
-  }
   buscarPorFiltros() {
     this.criteria = {
       fromDate: `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,
       toDate: `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,
       alquileres: this.filterForm.value.alquileres,
-      devoluciones: this.filterForm.value.devoluciones
+      devoluciones: this.filterForm.value.devoluciones,
+      searchBy: localStorage.getItem('userName')
     };
 
     console.log(this.criteria);
 
     this.loadServicios(this.criteria);
   }
-  devolverVehiculo(servicio: IServicio) {
-    console.log(`Usted va a devolver ${servicio}`);
+  cancelarServicio(servicio: IServicio) {
+    this.alquileresService.CancelarServicio(servicio)
+      .subscribe(response => { console.log(response); this.loadServicios(); }, (error) => {});
   }
   isHovered(date: NgbDate) {
     return this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate);

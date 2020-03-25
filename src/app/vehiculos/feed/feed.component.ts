@@ -19,7 +19,7 @@ export class FeedComponent implements OnInit {
 
   public filterForm: FormGroup;
   public isCollapsed = false;
-  public vehiculos: IVehiculo[];
+  public vehiculos: IVehiculo[] = [];
   public criteria: ISearchVehiculoCriteria;
 
   constructor(

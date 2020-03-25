@@ -7,15 +7,16 @@ import { HomeComponent } from './home/home.component';
 import { FooterComponent } from './footer/footer.component';
 import { ClientesSelectComponent } from './clientes-select/clientes-select.component';
 import { FormsModule } from '@angular/forms';
+import { CategoriasSelectComponent } from './categorias-select/categorias-select.component';
 
 
 @NgModule({
-  declarations: [NavbarComponent, HomeComponent, FooterComponent, ClientesSelectComponent],
+  declarations: [NavbarComponent, HomeComponent, FooterComponent, ClientesSelectComponent, CategoriasSelectComponent],
   imports: [
     CommonModule,
     FormsModule,
     SharedRoutingModule
   ],
-  exports: [NavbarComponent, HomeComponent, FooterComponent, ClientesSelectComponent],
+  exports: [NavbarComponent, HomeComponent, FooterComponent, ClientesSelectComponent, CategoriasSelectComponent],
 })
 export class SharedModule { }

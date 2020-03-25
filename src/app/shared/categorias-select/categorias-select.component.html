@@ -1,0 +1,8 @@
+<div class="form-group">
+  <div class="input-group">
+      <select class="form-control" id="selectCategoria" (change)="this.sendSelectedOption()" [(ngModel)]="this.id">
+          <option value="0" disabled>Categoria</option>
+          <option *ngFor="let item of this.categorias" [value]='item.id'>{{item.descripcion}}</option>
+      </select>
+  </div>
+</div>
