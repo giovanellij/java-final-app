@@ -59,7 +59,7 @@ export class FeedComponent implements OnInit {
   buscarPorFiltros() {
     this.criteria = {
       fromDate: `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,
-      toDate: `${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,
+      toDate: `${this.toDate.year}-${this.toDate.month}-${this.toDate.day}`,
       alquileres: this.filterForm.value.alquileres,
       devoluciones: this.filterForm.value.devoluciones,
       searchBy: localStorage.getItem('userName')

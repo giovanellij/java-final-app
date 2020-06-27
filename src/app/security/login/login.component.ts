@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['']);
       },
       (error: any) => {
-        console.log(error);
+        alert(error.error.message);
       },
       () => {}
     );
