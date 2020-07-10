@@ -45,7 +45,12 @@ export class VehiculosService {
     let url = `${this.API}/vehiculos`;
 
     if (!this.loginService.isAdmin()) {
-      url += 'Disponibles';
+      url = `${this.API}/vehiculosDisponibles`;
+    } else {
+      if (this.loginService.isAdmin()) {
+        url = `${this.API}/vehiculos/admin`;
+        console.log(url);
+      }
     }
 
     if (!filter) {

@@ -32,17 +32,13 @@ export class LoginService {
   }
 
   isAdmin() {
-    let isAuthenticated = false;
     let isAdmin = false;
 
-    if (localStorage.getItem('userName') !== null) {
-      isAuthenticated = true;
-      if (localStorage.getItem('isAdmin') === 'true') {
-        isAdmin = true;
-      }
+    if (localStorage.getItem('isAdmin') === 'true') {
+      isAdmin = true;
     }
 
-    return isAuthenticated && isAdmin;
+    return this.isAuthenticated() && isAdmin;
   }
 
   login(user: IUsuario) {
